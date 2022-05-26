@@ -5,7 +5,10 @@ export default function ClientProjectPage() {
 
   function loadProjectHandler() {
     // load data...pageProps
-    router.push("/clients/geo/projecta");
+    router.push({
+      pathname: "/clients/[id]/[clientprojectid]",
+      query: { id: "geo", clientprojectid: "projecta" },
+    });
   }
 
   return (
