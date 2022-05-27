@@ -1,5 +1,6 @@
-import EventItem from "./event-item";
-import classes from "./event-list.module.css";
+import EventItem from "../event-item";
+
+import classes from "./styles.module.css";
 
 export default function EventList({ items }) {
   return (
