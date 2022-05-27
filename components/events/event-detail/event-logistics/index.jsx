@@ -1,4 +1,4 @@
-import { AddressIcon, DateIcon } from "../../icons";
+import { AddressIcon, DateIcon } from "../../../icons";
 import LogisticsItem from "../logistics-item";
 import classes from "./styles.module.css";
 

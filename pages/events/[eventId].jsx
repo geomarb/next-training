@@ -1,7 +1,11 @@
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 
-import { EventSummary, EventLogistics, EventContent } from "../../components";
+import {
+  EventSummary,
+  EventLogistics,
+  EventContent,
+} from "../../components/events";
 import { getEventById } from "../../dummy-data";
 
 export default function EventDetailPage() {

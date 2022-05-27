@@ -1,5 +1,5 @@
-import { EventList } from "../../components";
 import { getAllEvents } from "../../dummy-data";
+import { EventList, EventSearch } from "../../components/events";
 
 export default function AllEventsPage() {
   const events = getAllEvents();
@@ -7,8 +7,9 @@ export default function AllEventsPage() {
   if (!events) return <>No events found!</>;
 
   return (
-    <div>
+    <>
+      <EventSearch />
       <EventList items={events} />
-    </div>
+    </>
   );
 }
