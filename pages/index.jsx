@@ -12,9 +12,10 @@ export default function HomePage({ products }) {
 }
 
 export async function getStaticProps() {
+  console.log("(Re-)Generating-*");
   const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
   const jsonData = await fs.readFile(filePath);
   const { products } = JSON.parse(jsonData);
 
-  return { props: { products } };
+  return { props: { products }, revalidate: 10 };
 }
