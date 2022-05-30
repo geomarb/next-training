@@ -1,28 +1,25 @@
 import { useState, useEffect } from "react";
+import useSWR from "swr";
 
 export default function LastSalesPage() {
   const [sales, setSales] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { data, error } = useSWR(
+    "https://geomarb-default-rtdb.firebaseio.com/sales.json",
+    (url) => fetch(url).then((res) => res.json())
+  );
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch("https://geomarb-default-rtdb.firebaseio.com/sales.json")
-      .then((res) => res.json())
-      .then((data) => {
-        const sales = [];
+    if (data) {
+      const sales = [];
+      for (const key in data) sales.push({ ...data[key], id: key });
+      setSales(sales);
+    }
+  }, [data]);
 
-        for (const key in data) sales.push({ ...data[key], id: key });
+  if (error) return <p>Failed do load.</p>;
 
-        console.log(sales);
-
-        setSales(sales);
-        setIsLoading(false);
-      });
-  }, []);
-
-  if (isLoading) return <p>Loading...</p>;
-
-  if (!sales) return <p>No data yet!</p>;
+  if (!data || !sales) return <p>Loading...</p>;
 
   return (
     <ul>
