@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs/promises";
 
 export default function ProductDetailPage({ loadedProduct }) {
+  if (!loadedProduct) return <p>Loading...</p>;
   const { title, description } = loadedProduct;
 
   return (
@@ -26,6 +27,8 @@ export async function getStaticProps(context) {
   const data = await getData();
   const product = data.products.find((prod) => prod.id === productId);
 
+  if (!product) return { notFound: true };
+
   return { props: { loadedProduct: product } };
 }
 
@@ -33,10 +36,10 @@ export async function getStaticPaths() {
   const data = await getData();
 
   const ids = data.products.map((product) => product.id);
-
   const pathsWithParams = ids.map((id) => ({ params: { pid: id } }));
+
   return {
     paths: pathsWithParams,
-    fallback: false,
+    fallback: true,
   };
 }
