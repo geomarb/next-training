@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 
-export default function LastSalesPage() {
-  const [sales, setSales] = useState();
+export default function LastSalesPage(props) {
+  const [sales, setSales] = useState(props.sales);
 
   const { data, error } = useSWR(
     "https://geomarb-default-rtdb.firebaseio.com/sales.json",
@@ -19,7 +19,7 @@ export default function LastSalesPage() {
 
   if (error) return <p>Failed do load.</p>;
 
-  if (!data || !sales) return <p>Loading...</p>;
+  if (!data && !sales) return <p>Loading...</p>;
 
   return (
     <ul>
@@ -30,4 +30,16 @@ export default function LastSalesPage() {
       ))}
     </ul>
   );
+}
+
+export async function getStaticProps() {
+  const res = await fetch(
+    "https://geomarb-default-rtdb.firebaseio.com/sales.json"
+  );
+  const data = await res.json();
+
+  const sales = [];
+  for (const key in data) sales.push({ ...data[key], id: key });
+
+  return { props: { sales } };
 }
