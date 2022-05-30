@@ -7,7 +7,7 @@ export default function HomePage({ products }) {
     <ul>
       {products.map(({ id, title }) => (
         <li key={id}>
-          <Link href={`/${id}`}>{title}</Link>
+          <Link href={`/products/${id}`}>{title}</Link>
         </li>
       ))}
     </ul>
