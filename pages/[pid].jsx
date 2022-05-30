@@ -1,9 +1,11 @@
 import path from "path";
 import fs from "fs/promises";
 
-export default function ProductDetailPage({
-  loadedProduct: { title, description },
-}) {
+export default function ProductDetailPage({ loadedProduct }) {
+  if (!loadedProduct) return <p>Loading...</p>;
+
+  const { title, description } = loadedProduct;
+
   return (
     <>
       <h1>{title}</h1>
@@ -28,11 +30,7 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   return {
-    paths: [
-      { params: { pid: "p1" } },
-      { params: { pid: "p2" } },
-      { params: { pid: "p3" } },
-    ],
-    fallback: false,
+    paths: [{ params: { pid: "p1" } }],
+    fallback: true,
   };
 }
