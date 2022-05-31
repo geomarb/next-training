@@ -21,3 +21,16 @@ export function getEvents(data) {
   for (const key in data) events.push({ id: key, ...data[key] });
   return events;
 }
+
+export async function getFilteredEvents({ year, month }) {
+  const allEvents = await getAllEvents();
+
+  const filteredEvents = allEvents.filter((event) => {
+    const eventDate = new Date(event.date);
+    return (
+      eventDate.getFullYear() === year && eventDate.getMonth() === month - 1
+    );
+  });
+
+  return filteredEvents;
+}

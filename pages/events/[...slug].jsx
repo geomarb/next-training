@@ -1,38 +1,19 @@
 import { useRouter } from "next/router";
 import { EventList, ResultsTitle } from "../../components/events";
 import { ErrorAlert } from "../../components/ui";
-import { getFilteredEvents } from "../../dummy-data";
+import { getFilteredEvents } from "../../helpers/api-util";
 
-export default function FilteredEventsPage() {
+export default function FilteredEventsPage({ hasError, events, year, month }) {
   const router = useRouter();
-
-  function buildErrorAlert(message) {
-    return (
-      <ErrorAlert
-        link="/events"
-        buttonTitle="Show All Events"
-        message={message}
-      />
-    );
-  }
-
-  const filterData = router.query.slug;
+  const { slug: filterData } = router.query;
 
   if (!filterData) return <p className="center">Loading...</p>;
 
-  const [filteredYear, filteredMonth] = filterData;
-  const [year, month] = [+filteredYear, +filteredMonth];
-  const isYearOrMonthNaN = isNaN(year) || isNaN(month);
-  const isInvalidYear = year > 2030 || year < 2021;
-  const isInvalidMonth = month < 1 || month > 12;
-
-  if (isYearOrMonthNaN || isInvalidYear || isInvalidMonth) {
+  if (hasError) {
     return <ErrorAlert message="Invalid filter. Please adjust your values" />;
   }
 
-  const filteredEvents = getFilteredEvents({ year, month });
-
-  if (!filteredEvents || filteredEvents.length === 0) {
+  if (!events || events.length === 0) {
     return (
       <ErrorAlert
         link="/events"
@@ -45,7 +26,31 @@ export default function FilteredEventsPage() {
   return (
     <>
       <ResultsTitle date={new Date(year, month - 1)} />
-      <EventList items={filteredEvents} />
+      <EventList items={events} />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { slug: filterData } = context.params;
+  const [year, month] = getYearAndMonth(filterData);
+
+  if (!isValidYearAndMonth(year, month)) return { props: { hasError: true } };
+
+  const events = await getFilteredEvents({ year, month });
+
+  return { props: { events, year, month } };
+}
+
+function isValidYearAndMonth(year, month) {
+  const isValidYear = !isNaN(year) && year <= 2030 && year >= 2021;
+  const isValidMonth = !isNaN(month) && month >= 1 && month <= 12;
+
+  return isValidYear && isValidMonth;
+}
+
+function getYearAndMonth(filterData) {
+  const [filteredYear, filteredMonth] = filterData;
+
+  return [+filteredYear, +filteredMonth];
 }
