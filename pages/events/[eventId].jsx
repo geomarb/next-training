@@ -5,10 +5,10 @@ import {
   EventLogistics,
   EventContent,
 } from "../../components/events";
-import { getAllEvents, getEventById } from "../../helpers/api-util";
+import { getFeaturedEvents, getEventById } from "../../helpers/api-util";
 
 export default function EventDetailPage({ event }) {
-  if (!event) return <p>No event found!</p>;
+  if (!event) return <div className="center">Loading....</div>;
 
   const { title, description, date, location, image } = event;
 
@@ -29,12 +29,14 @@ export default function EventDetailPage({ event }) {
 }
 
 export async function getStaticProps(ctx) {
-  console.log(ctx.params);
-  return { props: { event: await getEventById(ctx.params.eventId) } };
+  const event = await getEventById(ctx.params.eventId);
+
+  return { props: { event }, revalidate: 30 };
 }
 
 export async function getStaticPaths() {
-  const events = await getAllEvents();
+  const events = await getFeaturedEvents();
   const paths = events.map((event) => ({ params: { eventId: event.id } }));
-  return { paths, fallback: false };
+
+  return { paths, fallback: "blocking" };
 }
