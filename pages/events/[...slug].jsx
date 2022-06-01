@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import { EventList, ResultsTitle } from "../../components/events";
 import { ErrorAlert } from "../../components/ui";
 import {
@@ -45,6 +46,10 @@ export default function FilteredEventsPage(props) {
 
   return (
     <>
+      <Head>
+        <title>Filter Events</title>
+        <meda name="description" content={`All events for ${month}/${year}`} />
+      </Head>
       <ResultsTitle date={new Date(year, month - 1)} />
       <EventList items={filteredEvents} />
     </>

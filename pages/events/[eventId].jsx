@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import Head from "next/head";
 
 import {
   EventSummary,
@@ -13,7 +13,11 @@ export default function EventDetailPage({ event }) {
   const { title, description, date, location, image } = event;
 
   return (
-    <Fragment>
+    <>
+      <Head>
+        <title>{event.title}</title>
+        <meda name="description" content={description} />
+      </Head>
       <EventSummary title={title} />
       <EventLogistics
         date={date}
@@ -24,7 +28,7 @@ export default function EventDetailPage({ event }) {
       <EventContent>
         <p>{description}</p>
       </EventContent>
-    </Fragment>
+    </>
   );
 }
 
