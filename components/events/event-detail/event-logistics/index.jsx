@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { AddressIcon, DateIcon } from "../../../icons";
 import LogisticsItem from "../logistics-item";
 import classes from "./styles.module.css";
@@ -13,7 +15,7 @@ export default function EventLogistics({ date, address, image, imageAlt }) {
   return (
     <section className={classes.logistics}>
       <div className={classes.image}>
-        <img src={`/${image}`} alt={imageAlt} />
+        <Image src={`/${image}`} alt={imageAlt} width={400} height={400} />
       </div>
       <ul className={classes.list}>
         <LogisticsItem icon={DateIcon}>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Button } from "../../ui";
 import { DateIcon, AddressIcon, ArrowRightIcon } from "../../icons";
 import classes from "./styles.module.css";
@@ -10,7 +11,7 @@ export default function EventItem({ id, title, location, date, image }) {
 
   return (
     <li className={classes.item}>
-      <img src={`/${image}`} alt={title} />
+      <Image src={`/${image}`} alt={title} width={250} height={160} />
       <div className={classes.content}>
         <div className={classes.summary}>
           <h2>{title}</h2>
