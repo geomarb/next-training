@@ -27,29 +27,52 @@ export default function FilteredEventsPage(props) {
     if (data) return setEvents(getEvents(data));
   }, [data]);
 
-  if (!events) return <p className="center">Loading...</p>;
+  const pageHeadData = (
+    <Head>
+      <title>Filter Events</title>
+      <meda
+        name="description"
+        content={
+          month && year ? `All events for ${month}/${year}` : "A list of events"
+        }
+      />
+    </Head>
+  );
+
+  if (!events)
+    return (
+      <>
+        {pageHeadData}
+        <p className="center">Loading...</p>
+      </>
+    );
 
   if (!isValidYearAndMonth(year, month) || error) {
-    return <ErrorAlert message="Invalid filter. Please adjust your values" />;
+    return (
+      <>
+        {pageHeadData}
+        <ErrorAlert message="Invalid filter. Please adjust your values" />
+      </>
+    );
   }
   const filteredEvents = filterEvents(events, year, month);
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
-      <ErrorAlert
-        link="/events"
-        buttonTitle="Show All Events"
-        message="No events found for the chosen filter!"
-      />
+      <>
+        {pageHeadData}
+        <ErrorAlert
+          link="/events"
+          buttonTitle="Show All Events"
+          message="No events found for the chosen filter!"
+        />
+      </>
     );
   }
 
   return (
     <>
-      <Head>
-        <title>Filter Events</title>
-        <meda name="description" content={`All events for ${month}/${year}`} />
-      </Head>
+      {pageHeadData}
       <ResultsTitle date={new Date(year, month - 1)} />
       <EventList items={filteredEvents} />
     </>
