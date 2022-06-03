@@ -1,12 +1,19 @@
-import { MongoClient } from "mongodb";
+import {
+  connectDatabase,
+  inserDocument,
+  getAllDocuments,
+} from "../../../helpers/db-util";
 
 export default async function handler(req, res) {
   const eventId = req.query.eventId;
+  let client;
 
-  const client = await MongoClient.connect(
-    `mongodb+srv://root:kXrFk778zMRXyu8w@cluster0.sr7nv.mongodb.net/?retryWrites=true&w=majority`
-  );
-
+  try {
+    client = await connectDatabase();
+  } catch (error) {
+    res.status(500).json({ message: "Connecting to the database failed!" });
+    return;
+  }
   const { email, name, text } = req.body;
 
   if (req.method === "POST") {
@@ -17,26 +24,29 @@ export default async function handler(req, res) {
       !text ||
       text.trim() === ""
     ) {
-      return res.status(422).json({ message: "Invalid input" });
+      res.status(422).json({ message: "Invalid input" });
+      client.close();
+      return;
     }
-    const comment = { email, name, text, eventId };
+    const newComment = { email, name, text, eventId };
 
-    const db = client.db("events");
-    const result = await db.collection("comments").insertOne(comment);
-
-    res.status(201).json({ message: "Added Comment", comment, result });
-    return;
+    try {
+      const result = await inserDocument(client, "comments", newComment);
+      newComment._id = result.insertedId;
+      res.status(201).json({ message: "Added Comment", comment: newComment });
+    } catch (error) {
+      res.status(500).json({ message: "Inserting comments failed!" });
+    }
   }
 
   if (req.method === "GET") {
-    const db = client.db("events");
-    const documents = await db
-      .collection("comments")
-      .find()
-      .sort({ _id: -1 })
-      .toArray();
-
-    res.status(200).json({ comments: documents });
+    try {
+      const documents = await getAllDocuments(client, "comments", { _id: -1 });
+      res.status(200).json({ comments: documents });
+    } catch (error) {
+      res.status(500).json({ message: "Getting comments fail" });
+    }
   }
+
   client.close();
 }
