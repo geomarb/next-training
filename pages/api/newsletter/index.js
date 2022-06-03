@@ -13,9 +13,7 @@ export default async function handler(req, res) {
     );
 
     const db = client.db("newsletter");
-
     await db.collection("emails").insertOne({ email });
-
     client.close();
 
     res.status(201).json({ message: "Signed up" });
