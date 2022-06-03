@@ -1,5 +1,11 @@
-export default function handler(req, res) {
+import { MongoClient } from "mongodb";
+
+export default async function handler(req, res) {
   const eventId = req.query.eventId;
+
+  const client = await MongoClient.connect(
+    `mongodb+srv://root:kXrFk778zMRXyu8w@cluster0.sr7nv.mongodb.net/?retryWrites=true&w=majority`
+  );
 
   const { email, name, text } = req.body;
 
@@ -13,9 +19,14 @@ export default function handler(req, res) {
     ) {
       return res.status(422).json({ message: "Invalid input" });
     }
-    const newComment = { id: new Date().toISOString(), email, name, text };
-    console.log(newComment);
-    res.status(201).json({ message: "Added Comment", comment: newComment });
+    const comment = { email, name, text, eventId };
+
+    const db = client.db("events");
+    const result = await db.collection("comments").insertOne(comment);
+
+    console.log(result);
+
+    res.status(201).json({ message: "Added Comment", comment, result });
     return;
   }
 
@@ -27,4 +38,6 @@ export default function handler(req, res) {
 
     res.status(200).json({ comments: dummyList });
   }
+
+  client.close();
 }

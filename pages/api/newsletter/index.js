@@ -12,8 +12,8 @@ export default async function handler(req, res) {
       `mongodb+srv://root:kXrFk778zMRXyu8w@cluster0.sr7nv.mongodb.net/?retryWrites=true&w=majority`
     );
 
-    const db = client.db("newsletter");
-    await db.collection("emails").insertOne({ email });
+    const db = client.db("events");
+    await db.collection("newsletter").insertOne({ email });
     client.close();
 
     res.status(201).json({ message: "Signed up" });
