@@ -6,6 +6,7 @@ import {
   EventContent,
 } from "../../components/events";
 import { getFeaturedEvents, getEventById } from "../../helpers/api-util";
+import Comments from "../../components/input/comments";
 
 export default function EventDetailPage({ event }) {
   if (!event) return <div className="center">Loading....</div>;
@@ -28,6 +29,7 @@ export default function EventDetailPage({ event }) {
       <EventContent>
         <p>{description}</p>
       </EventContent>
+      <Comments eventId={event.id} />
     </>
   );
 }
