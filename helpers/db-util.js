@@ -13,5 +13,6 @@ export async function inserDocument(client, collection, document) {
 }
 
 export async function getAllDocuments(client, collection, sort) {
-  return await client.collection(collection).find().sort(sort).toArray();
+  const db = client.db();
+  return await db.collection(collection).find().sort(sort).toArray();
 }
