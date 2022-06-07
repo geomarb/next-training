@@ -1,5 +1,7 @@
-import classes from "./styles.modules.css";
-import PostHeader from "../../post-header";
+import ReactMarkdown from "react-markdown";
+
+import PostHeader from "../post-header";
+import classes from "./styles.module.css";
 import { DUMMY_POSTS } from "../../../../pages";
 
 export default function PostContent(props) {
@@ -7,9 +9,9 @@ export default function PostContent(props) {
   const { slug, title, image, content } = DUMMY_POSTS[0];
   const imagePath = `/images/posts/${slug}/${image}`;
   return (
-    <article>
+    <article className={classes.content}>
       <PostHeader title={title} image={imagePath} />
-      {content}
+      <ReactMarkdown>{content}</ReactMarkdown>
     </article>
   );
 }

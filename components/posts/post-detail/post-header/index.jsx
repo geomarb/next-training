@@ -1,5 +1,5 @@
 import Image from "next/image";
-import classes from "./styles.modules.css";
+import classes from "./styles.module.css";
 
 export default function PostHeader({ title, image }) {
   return (

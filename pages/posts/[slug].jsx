@@ -1,8 +1,5 @@
+import PostContent from "../../components/posts/post-detail/post-content";
+
 export default function PostDetailPage(props) {
-  return (
-    <div>
-      <h1>[slug]</h1>
-      <p></p>
-    </div>
-  );
+  return <PostContent />;
 }
