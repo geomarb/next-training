@@ -1,4 +1,6 @@
-export default function handler(req, res) {
+import { MongoClient } from "mongodb";
+
+export default async function handler(req, res) {
   if (req.method === "POST") {
     const { email, name, message } = req.body;
 
@@ -16,10 +18,21 @@ export default function handler(req, res) {
 
     const newMessage = { email, name, message };
 
-    console.log(newMessage);
+    try {
+      console.log(process.env.REACT_APP_MONGODB);
+      const client = await MongoClient.connect(process.env.REACT_APP_MONGODB);
+      const db = client.db();
+      const result = await db.collection("messages").insertOne(newMessage);
 
-    res
-      .status(201)
-      .json({ message: "Successfully stored message!", newMessage });
+      newMessage.id = result.insertedId;
+
+      client.close();
+      res
+        .status(201)
+        .json({ message: "Successfully stored message!", newMessage });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Something went wrong." });
+    }
   }
 }
