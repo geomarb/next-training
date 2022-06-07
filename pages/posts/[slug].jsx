@@ -6,7 +6,8 @@ export default function PostDetailPage(props) {
 }
 
 export function getStaticProps(ctx) {
-  return { props: { post: getPostData(ctx.params.slug) }, revalidate: 600 };
+  const post = getPostData(ctx.params.slug);
+  return { props: { post }, revalidate: 600 };
 }
 
 export function getStaticPaths() {
