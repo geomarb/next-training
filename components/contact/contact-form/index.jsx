@@ -28,6 +28,10 @@ export default function ContactForm() {
     try {
       await sendContactData({ email, name, message });
       setRequestStatus("success");
+
+      setEmail("");
+      setName("");
+      setMessage("");
     } catch (error) {
       setRequestError(error.message);
       setRequestStatus("error");
