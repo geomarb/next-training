@@ -13,9 +13,13 @@ export default function handler(req, res) {
       res.status(422).json({ message: "Invalid input." });
       return;
     }
+
+    const newMessage = { email, name, message };
+
+    console.log(newMessage);
+
+    res
+      .status(201)
+      .json({ message: "Successfully stored message!", newMessage });
   }
-
-  const newMessage = { email, name, message };
-
-  res.status(201).json({ message: "Successfully stored message!", newMessage });
 }
