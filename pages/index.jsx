@@ -14,5 +14,3 @@ export default function HomePage(props) {
 export function getStaticProps() {
   return { props: { posts: getFeaturedPosts() }, revalidate: 60 * 60 * 4 };
 }
-
-export const DUMMY_POSTS = getFeaturedPosts();
