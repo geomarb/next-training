@@ -1,8 +1,6 @@
-export default function AllPostsPage(props) {
-  return (
-    <div>
-      <h1>Posts Page</h1>
-      <p></p>
-    </div>
-  );
+import AllPosts from "../../components/posts/all-posts";
+import { DUMMY_POSTS } from "..";
+
+export default function AllPostsPage() {
+  return <AllPosts posts={DUMMY_POSTS} />;
 }
