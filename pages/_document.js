@@ -8,6 +8,7 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <div id="notifications"></div>
         </body>
       </Html>
     );
