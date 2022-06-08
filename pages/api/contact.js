@@ -37,12 +37,15 @@ export default async function handler(req, res) {
   }
 }
 
-function getConnectString() {
-  const {
-    MONGODB_USERNAME: username,
-    MONGODB_PASSWORD: password,
-    MONGODB_CLUSTERNAME: clustername,
-    MONGODB_DATABASE: database,
-  } = process.env;
+function buildConnectString(username, password, clustername, database) {
   return `mongodb+srv://${username}:${password}@${clustername}.sr7nv.mongodb.net/${database}?retryWrites=true&w=majority`;
+}
+
+function getConnectString() {
+  return buildConnectString(
+    process.env.MONGODB_USERNAME,
+    process.env.MONGODB_PASSWORD,
+    process.env.MONGODB_CLUSTERNAME,
+    process.env.MONGODB_DATABASE
+  );
 }
